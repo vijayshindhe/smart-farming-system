@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 
 const app = express();
@@ -29,10 +29,12 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
     if (err) {
-        console.log("Database connection failed:", err.message);
+        console.error("Database connection failed:", err.message);
+        console.error("Server will continue running, but DB operations will fail.");
+        console.error("Please set DB_HOST, DB_USER, DB_PASSWORD, DB_NAME env variables.");
     }
     else {
-        console.log("MySQL Connected");
+        console.log("MySQL Connected successfully!");
     }
 });
 
