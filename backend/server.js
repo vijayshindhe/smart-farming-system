@@ -19,22 +19,32 @@ app.get('/', (req, res) => {
 
 /* DATABASE CONNECTION */
 
-const db = mysql.createConnection({
+const dbConfig = {
     host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD || "vijayshindhe",
     database: process.env.DB_NAME || "farmingdb",
-    port: process.env.DB_PORT || 3306 // Some external providers need explicit port
-});
+    port: process.env.DB_PORT || 3306
+};
+
+// Aiven and some other cloud providers require SSL.
+if (process.env.DB_HOST && process.env.DB_HOST !== "localhost") {
+    dbConfig.ssl = {
+        rejectUnauthorized: false // Required for many cloud providers
+    };
+}
+
+const db = mysql.createConnection(dbConfig);
 
 db.connect((err) => {
     if (err) {
-        console.error("Database connection failed:", err.message);
+        console.error("❌ Database connection failed!");
+        console.error("Error Code:", err.code);
+        console.error("Error Message:", err.message);
         console.error("Server will continue running, but DB operations will fail.");
-        console.error("Please set DB_HOST, DB_USER, DB_PASSWORD, DB_NAME env variables.");
     }
     else {
-        console.log("MySQL Connected successfully!");
+        console.log("✅ MySQL Connected successfully!");
     }
 });
 
