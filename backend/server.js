@@ -45,6 +45,22 @@ db.connect((err) => {
     }
     else {
         console.log("✅ MySQL Connected successfully!");
+
+        // Ensure users table exists
+        const createTableQuery = `
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL
+            )
+        `;
+        db.query(createTableQuery, (err, result) => {
+            if (err) {
+                console.error("Error creating users table:", err);
+            } else {
+                console.log("Users table ready");
+            }
+        });
     }
 });
 
@@ -76,7 +92,7 @@ app.post("/register", async (req, res) => {
             console.log("db query returned", err ? "error" : "success");
             if (err) {
                 console.error("Register DB Error:", err);
-                return res.status(500).send("Register error: Database operation failed");
+                return res.status(500).send("Register error: " + err.message);
             }
             res.send("User Registered");
         }
@@ -97,7 +113,7 @@ app.post("/login", (req, res) => {
 
             if (err) {
                 console.error("Login DB Error:", err);
-                return res.status(500).json({ message: "Database connection error" });
+                return res.status(500).json({ message: "Database connection error: " + err.message });
             }
 
             if (result.length === 0) {
