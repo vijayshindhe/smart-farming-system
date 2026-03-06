@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approved Agricultural Sellers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+                url("https://images.unsplash.com/photo-1500382017468-9049fed747ef");
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #b9f6ca;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #ddd;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid #a5d6a7;
+            color: #a5d6a7;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(165, 214, 167, 0.2);
+            color: white;
+        }
+
+        .category-title {
+            font-size: 24px;
+            color: #a5d6a7;
+            margin-bottom: -15px;
+            margin-top: 10px;
+        }
+
+        .seller-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .seller-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .seller-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            border-color: #4CAF50;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #2e7d32;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.pesticide {
+            background: #d32f2f;
+        }
+
+        .badge.organic {
+            background: #f57c00;
+        }
+
+        .seller-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 8px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .action-btn:hover {
+            background: #2e7d32;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>🛒 Top Rated Suppliers</h1>
+            <p>Connect with verified sellers to purchase your recommended materials</p>
+            <button class="nav-btn" onclick="window.history.back()">← Back to Dashboard</button>
+        </div>
+
+        <h2 class="category-title">Fertilizer Providers</h2>
+        <div class="seller-grid">
+
+            <div class="seller-card">
+                <span class="badge">FERTILIZERS</span>
+                <div class="seller-name">GreenEarth Agrotech</div>
+                <div class="detail-row">📍 2.3 km away</div>
+                <div class="detail-row">⭐ 4.8 (120 reviews)</div>
+                <div class="detail-row">📦 NPK, Urea, Dolomite, Lime</div>
+                <button class="action-btn"
+                    onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=GreenEarth+Agrotech', '_blank')">Navigate
+                    to Seller</button>
+            </div>
+
+            <div class="seller-card">
+                <span class="badge">FERTILIZERS</span>
+                <span class="badge organic">ORGANIC</span>
+                <div class="seller-name">Nature's Yield</div>
+                <div class="detail-row">📍 5.1 km away</div>
+                <div class="detail-row">⭐ 4.9 (85 reviews)</div>
+                <div class="detail-row">📦 Compost, Manure, Sulfur</div>
+                <button class="action-btn"
+                    onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=Nature%27s+Yield+Fertilizer', '_blank')">Navigate
+                    to Seller</button>
+            </div>
+
+        </div>
+
+        <h2 class="category-title">Pesticides & Crop Protection</h2>
+        <div class="seller-grid">
+
+            <div class="seller-card">
+                <span class="badge pesticide">PESTICIDES</span>
+                <div class="seller-name">CropGuard Solutions</div>
+                <div class="detail-row">📍 3.8 km away</div>
+                <div class="detail-row">⭐ 4.6 (210 reviews)</div>
+                <div class="detail-row">📦 Copper Fungicide, Bt Spray</div>
+                <button class="action-btn"
+                    onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=CropGuard+Solutions', '_blank')">Navigate
+                    to Seller</button>
+            </div>
+
+            <div class="seller-card">
+                <span class="badge pesticide">PESTICIDES</span>
+                <span class="badge organic">ORGANIC</span>
+                <div class="seller-name">EcoPest Controls</div>
+                <div class="detail-row">📍 7.0 km away</div>
+                <div class="detail-row">⭐ 4.7 (94 reviews)</div>
+                <div class="detail-row">📦 Neem Oil, Beneficial Nematodes</div>
+                <button class="action-btn"
+                    onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=EcoPest+Controls', '_blank')">Navigate
+                    to Seller</button>
+            </div>
+
+            <div class="seller-card">
+                <span class="badge pesticide">PESTICIDES</span>
+                <div class="seller-name">AgriChem Wholesalers</div>
+                <div class="detail-row">📍 12.5 km away</div>
+                <div class="detail-row">⭐ 4.3 (315 reviews)</div>
+                <div class="detail-row">📦 Spinosad, Chemical Defenses</div>
+                <button class="action-btn"
+                    onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=AgriChem+Wholesalers', '_blank')">Navigate
+                    to Seller</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

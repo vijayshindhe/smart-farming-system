@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+                url("https://images.unsplash.com/photo-1500382017468-9049fed747ef");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #b9f6ca;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #ddd;
+            margin-top: 5px;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #a5d6a7;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #e0e0e0;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #4CAF50;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #2e7d32;
+            transform: translateY(-2px);
+        }
+
+        .results {
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .weather-card {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .weather-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .weather-item span:first-child {
+            color: #a1d1a6;
+        }
+
+        .weather-item span:last-child {
+            font-weight: bold;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            font-size: 18px;
+            color: #b9f6ca;
+            margin-top: 20px;
+        }
+
+        .recommendation {
+            background: rgba(46, 125, 50, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <div class="header">
+            <h1>🧑‍🌾 Intelligent Crop Dashboard</h1>
+            <p>Enter soil details to get customized farming insights</p>
+        </div>
+
+        <div class="row">
+
+            <!-- SOIL INPUT FORM -->
+            <div class="col">
+                <h2>1. Soil Condition</h2>
+
+                <label>Soil Type</label>
+                <select id="soilType">
+                    <option value="Loamy">Loamy - Best for wheat, sugarcane, cotton</option>
+                    <option value="Clay">Clay - Best for paddy/rice</option>
+                    <option value="Sandy">Sandy - Best for maize, millets</option>
+                    <option value="Silt">Silt - Best for vegetables</option>
+                </select>
+
+                <label>Soil Moisture Level</label>
+                <select id="moisture">
+                    <option value="Dry">Dry Dashboard (< 20%)</option>
+                    <option value="Optimal">Optimal (20% - 60%)</option>
+                    <option value="Wet">Very Wet (> 60%)</option>
+                </select>
+
+                <label>Soil pH Level</label>
+                <input type="number" id="phLevel" placeholder="e.g. 6.5" min="0" max="14" step="0.1" value="6.5">
+
+                <button onclick="analyzeData()">Analyze & Get Weather</button>
+            </div>
+
+            <!-- WEATHER & INSIGHTS (Hidden initially) -->
+            <div class="col">
+                <h2>2. Analysis & Weather</h2>
+
+                <div class="loader" id="loader">Fetching live weather data...</div>
+
+                <div class="results" id="results">
+                    <div class="weather-card" id="weatherCard">
+                        <!-- Dynamic Weather Content Injected Here -->
+                    </div>
+
+                    <div class="recommendation" id="recommendationCard">
+                        <!-- Dynamic AI Recommendation Injected Here -->
+                    </div>
+
+                    <button onclick="window.location.href='sellers.html'"
+                        style="margin-top: 20px; background: #00897b;">
+                        🛒 View Trusted Suppliers
+                    </button>
+                </div>
+
+                <div id="placeholder" style="color: #aaa; text-align: center; margin-top: 30%;">
+                    Submit the form to view live localized weather and AI crop tips.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        async function analyzeData() {
+            // Show loaders and hide placeholders
+            document.getElementById('placeholder').style.display = "none";
+            document.getElementById('results').style.display = "none";
+            document.getElementById('loader').style.display = "block";
+
+            // Grab form values
+            const soilType = document.getElementById('soilType').value;
+            const moisture = document.getElementById('moisture').value;
+            const ph = parseFloat(document.getElementById('phLevel').value);
+
+            try {
+                // Get User Coordinates via Geolocation
+                const coords = await getCoordinates();
+
+                // Fetch Live Weather using Open-Meteo API
+                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&timezone=auto`);
+                const weatherData = await weatherRes.json();
+
+                const current = weatherData.current;
+                const temp = current.temperature_2m;
+                const humidity = current.relative_humidity_2m;
+                const wind = current.wind_speed_10m;
+                const rain = current.precipitation;
+
+                // Update UI with Weather Data
+                document.getElementById('weatherCard').innerHTML = `
+                    <div class="weather-item"><span>🌡️ Temperature</span><span>${temp} °C</span></div>
+                    <div class="weather-item"><span>💧 Humidity</span><span>${humidity}%</span></div>
+                    <div class="weather-item"><span>🌧️ Precipitation</span><span>${rain} mm</span></div>
+                    <div class="weather-item"><span>🌬️ Wind Speed</span><span>${wind} km/h</span></div>
+                `;
+
+                // Generate basic local rule-based Recommendation based on Inputs and Weather
+                let advice = "";
+                if (moisture === "Dry" && rain === 0) {
+                    advice += "🚨 <b>Urgent:</b> Immediate irrigation needed. High evaporation risk. ";
+                } else if (moisture === "Wet" && rain > 5) {
+                    advice += "🛑 <b>Warning:</b> Halt irrigation immediately to prevent root rot & waterlogging. ";
+                } else {
+                    advice += "✅ <b>Optimal:</b> Moisture levels are within safe operating limits. ";
+                }
+
+                if (ph < 5.5) {
+                    advice += "<br><br><b>🌱 Fertilizer:</b> Your soil is quite acidic. Apply Agricultural Lime or Dolomite to raise pH. Use Nitrate-based nitrogen fertilizers.";
+                } else if (ph > 7.5) {
+                    advice += "<br><br><b>🌱 Fertilizer:</b> Your soil is alkaline. Apply Sulfur, Iron Sulfate, or organic compost to lower pH. Use Ammonium-based fertilizers.";
+                } else {
+                    advice += "<br><br><b>🌱 Fertilizer:</b> pH is highly optimal. Use a balanced NPK (Nitrogen, Phosphorus, Potassium) 14-14-14 standard mix.";
+                }
+
+                // specific pest/solutions based on soil & moisture
+                let pesticide = "";
+                if (soilType === "Clay" && moisture === "Wet") {
+                    pesticide = "High risk of fungal root-rot and slugs. <b>🛡️ Pesticide/Fungicide:</b> Preventative Copper Fungicide and organic slug baits recommended.";
+                } else if (soilType === "Sandy" && moisture === "Dry") {
+                    pesticide = "High risk of nematodes and spider mites. <b>🛡️ Pesticide:</b> Apply Neem Oil spray early morning. Consider beneficial nematodes.";
+                } else if (soilType === "Loamy") {
+                    pesticide = "Standard broad-spectrum care. <b>🛡️ Pesticide:</b> Use Bacillus thuringiensis (Bt) for caterpillars and mild insecticidal soap for aphids.";
+                } else {
+                    pesticide = "<b>🛡️ Pesticide:</b> Monitor for local pests. Use sticky traps and resort to chemical pesticides (like Spinosad) only if severe infestation occurs.";
+                }
+
+                advice += `<br><br>${pesticide}<br><br>Given your <b>${soilType}</b> base, ensure proper nutrient balancing for the upcoming cycle.`;
+
+                document.getElementById('recommendationCard').innerHTML = advice;
+
+                // Toggle visibility
+                document.getElementById('loader').style.display = "none";
+                document.getElementById('results').style.display = "block";
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loader').style.display = "none";
+                document.getElementById('placeholder').style.display = "block";
+                document.getElementById('placeholder').innerText = "❌ Failed to fetch location or weather data. Please ensure location services are allowed in your browser.";
+            }
+
+        }
+
+        // Helper to Promisify Geolocation
+        function getCoordinates() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error("Geolocation is not supported by your browser"));
+                } else {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            resolve({
+                                lat: position.coords.latitude,
+                                lon: position.coords.longitude
+                            });
+                        },
+                        (err) => {
+                            // Fallback to average location (e.g. Center of a farm region like Central India / Midwest USA) if denied
+                            console.warn("Location denied or unavailable. Using fallback coordinates.");
+                            resolve({ lat: 21.1458, lon: 79.0882 }); // Nagpur fallback
+                        }
+                    );
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

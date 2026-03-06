@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Smart Farming</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url("https://images.unsplash.com/photo-1500382017468-9049fed747ef");
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .container {
+            width: 400px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2e7d32;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer;
+            color: #a5d6a7;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <div class="title">🌱 Smart Farming</div>
+
+        <!-- LOGIN -->
+
+        <div id="loginPage">
+
+            <input id="luser" placeholder="Username">
+            <input id="lpass" type="password" placeholder="Password">
+
+            <button onclick="login()">Login</button>
+
+            <div class="link" onclick="showRegister()">
+                Not registered? Register
+            </div>
+
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <div id="registerPage" style="display:none">
+
+            <input id="ruser" placeholder="Username">
+            <input id="rpass" type="password" placeholder="Password">
+
+            <button onclick="register()">Register</button>
+
+            <div class="link" onclick="showLogin()">
+                Back to Login
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* SWITCH PAGES */
+
+        function showRegister() {
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("registerPage").style.display = "block";
+        }
+
+        function showLogin() {
+            document.getElementById("registerPage").style.display = "none";
+            document.getElementById("loginPage").style.display = "block";
+        }
+
+
+        /* REGISTER */
+
+        async function register() {
+            try {
+                const username = document.getElementById("ruser").value;
+                const password = document.getElementById("rpass").value;
+
+                const res = await fetch("/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await res.text();
+                alert(data);
+                showLogin();
+            } catch (err) {
+                alert("Network Error: Could not connect to the backend server.");
+                console.error(err);
+            }
+        }
+
+        /* LOGIN */
+
+        async function login() {
+            try {
+                const username = document.getElementById("luser").value;
+                const password = document.getElementById("lpass").value;
+
+                const res = await fetch("/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                if (!res.ok) throw new Error("Status code not ok");
+
+                const data = await res.json();
+
+                if (data.message === "Login success") {
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert("Network Error: Could not connect to the backend server.");
+                console.error(err);
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
