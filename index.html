@@ -148,11 +148,16 @@
                     })
                 });
 
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || "Register failed");
+                }
+
                 const data = await res.text();
                 alert(data);
                 showLogin();
             } catch (err) {
-                alert("Network Error: Could not connect to the backend server.");
+                alert(err.message || "Network Error: Could not connect to the backend server.");
                 console.error(err);
             }
         }
@@ -175,7 +180,14 @@
                     })
                 });
 
-                if (!res.ok) throw new Error("Status code not ok");
+                if (!res.ok) {
+                    try {
+                        const errorData = await res.json();
+                        throw new Error(errorData.message || "Login failed");
+                    } catch (parseErr) {
+                        throw new Error("Server error. Status: " + res.status);
+                    }
+                }
 
                 const data = await res.json();
 
@@ -185,7 +197,7 @@
                     alert(data.message);
                 }
             } catch (err) {
-                alert("Network Error: Could not connect to the backend server.");
+                alert(err.message || "Network Error: Could not connect to the backend server.");
                 console.error(err);
             }
         }

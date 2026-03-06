@@ -75,11 +75,10 @@ app.post("/register", async (req, res) => {
         (err) => {
             console.log("db query returned", err ? "error" : "success");
             if (err) {
-                res.send("Register error");
+                console.error("Register DB Error:", err);
+                return res.status(500).send("Register error: Database operation failed");
             }
-            else {
-                res.send("User Registered");
-            }
+            res.send("User Registered");
         }
     );
 
@@ -95,6 +94,11 @@ app.post("/login", (req, res) => {
         "SELECT * FROM users WHERE username=?",
         [username],
         async (err, result) => {
+
+            if (err) {
+                console.error("Login DB Error:", err);
+                return res.status(500).json({ message: "Database connection error" });
+            }
 
             if (result.length === 0) {
                 return res.json({ message: "User not found" });
