@@ -20,15 +20,15 @@ app.get('/', (req, res) => {
 /* DATABASE CONNECTION */
 
 const dbConfig = {
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "vijayshindhe",
-    database: process.env.DB_NAME || "farmingdb",
-    port: process.env.DB_PORT || 3306
+    host: process.env.DB_HOST || "gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com",
+    user: process.env.DB_USER || "43D4pN6AyxWS7Hn.root",
+    password: process.env.DB_PASSWORD || "20woNsUsJ0bgZ8XP",
+    database: process.env.DB_NAME || "test",
+    port: process.env.DB_PORT || 4000
 };
 
-// Aiven and some other cloud providers require SSL.
-if (process.env.DB_HOST && process.env.DB_HOST !== "localhost") {
+// TiDB and some other cloud providers require SSL.
+if (dbConfig.host !== "localhost") {
     dbConfig.ssl = {
         rejectUnauthorized: false // Required for many cloud providers
     };
