@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: smart-farming-system
+    name: vijay_cloud
     env: node
     rootDir: backend
     buildCommand: npm install
